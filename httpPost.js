@@ -1,5 +1,4 @@
 var http = require('http');
-var qs = require('querystring');
 
 http.createServer(function (request, response) {
   if(request.method === "POST") {
