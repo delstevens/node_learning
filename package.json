@@ -1,6 +1,6 @@
 {
   "name": "node_learning",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Repo for node development to build the backend for DJam in Node.",
   "main": "index.js",
   "dependencies": {},
