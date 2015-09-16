@@ -1,0 +1,27 @@
+{
+  "name": "@delstevens/node_learning",
+  "version": "1.0.0",
+  "description": "learning about npm",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delstevens/node_learning.git"
+  },
+  "keywords": [
+    "node",
+    "tutorials",
+    "learning"
+  ],
+  "author": "delstevens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/delstevens/node_learning/issues"
+  },
+  "homepage": "https://github.com/delstevens/node_learning#readme",
+  "dependencies": {
+    "@linclark/pkg": "^1.0.2"
+  }
+}
