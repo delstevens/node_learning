@@ -3,7 +3,7 @@ var Q = require('q');
 var EventEmitter = require('events');
 
 
-function profile(username) {
+function getProfile(username) {
   var retVal = ""
   var request = http.get("http://teamtreehouse.com/" + username + ".json", function(response) {
     var body = "";
@@ -19,7 +19,7 @@ function profile(username) {
         retVal += (outString.badges.length + "\n")
         retVal += (outString.gravatar_url+ "\n")
         retVal += (outString.points.JavaScript+ "\n")
-        //console.log(retVal)
+        console.log(retVal)
         return retVal
       });
 
@@ -34,7 +34,7 @@ function profile(username) {
 }
 
 
-function getProfile(uName){
+function oldgetProfile(uName){
   var getProf = Q.denodeify(profile)
   var promise = getProf(uName)
   promise.then(console.log, console.error)
@@ -42,5 +42,4 @@ function getProfile(uName){
 }
 
 
-getProfile("delstevens")
-
+module.exports.Profile = getProfile

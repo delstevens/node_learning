@@ -15,7 +15,7 @@ function user(request, response){
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.write("Header \n")
     response.write(userName +  "\n")
-    var userProfile = new profile(userName)
+    var userProfile = profile.getProfile(userName)
 
     setTimeout(function () {
       console.log(JSON.parse(userProfile))
