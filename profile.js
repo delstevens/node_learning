@@ -3,7 +3,7 @@ var Q = require('q');
 var EventEmitter = require('events');
 
 
-function getProfile(username) {
+function profile(username) {
   var retVal = ""
   var request = http.get("http://teamtreehouse.com/" + username + ".json", function(response) {
     var body = "";
@@ -42,4 +42,4 @@ function oldgetProfile(uName){
 }
 
 
-module.exports.Profile = getProfile
+module.exports.Profile = profile
