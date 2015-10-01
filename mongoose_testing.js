@@ -1,7 +1,4 @@
-var http = require('http')
 var mongoose = require('mongoose');
-var db = mongoose.connection;
-
 var Schema = mongoose.Schema;
 var trackSchema = new Schema({
   title:  String,
@@ -11,47 +8,73 @@ var trackSchema = new Schema({
   year:   String,
   genre:  String
 });
+
 var Music = mongoose.model('Music', trackSchema)
-
-
-db.on('error', console.error);
-db.once('open', function() {
-
-
-  // Create your schemas and models here.
-});
-
 mongoose.connect('mongodb://localhost/Music');
 
-var first = new Music({
-  title: 'Ziggy Stardust and the Spiders From Mars', 
-  artist: 'David Bowie',
-  link:   'http://somenetaddress.com/track_this',
-  album:  'Aladdin Sane', 
-  year:   '1977',
-  genre:  'Odd'
-});
+function jsonSave(jsonObject) {
+  var thisJson = {'artist': jsonObject.artist, 'title': jsonObject.title}
+  var returnedData = findJsonObject(thisJson)
+  if ((returnedData === null) || (returnedData === undefined)) {
+    var first = new Music(jsonObject)
+    first.save(function(err, thisTrack) {
+      if (err) {
+        return console.error(err); 
+      } else {
+        console.log("Record Saved: " + thisTrack.title)
+      }
+    }).then('done', function () {
+      console.log('this says all done')
+      mongoose.disconnect()
+    })
+  } else {
+    console.log(returnedData)
+  }
 
-first.save(function(err, thisTrack) {
-  if (err) return console.error(err);
-  console.dir(thisTrack.title)
+}
+
+function findJsonObject (jsonObject, callback) {
+  var query = Music.findOne(jsonObject);
+  var outString
+  query.exec(function (err, data) {
+    if (err) {
+      return console.error(err)
+    } else {
+      if (data) {
+        outString = data.title + ' by ' + data.artist + ' is present in the database on the album: ' + data.album
+        callback(outString)
+      } else {
+        outString = null
+        callback(outString)
+      }
+    }
+  })
+}
+
+
+var jsonQuery = {'genre': 'Crooners'}
+findJsonObject(jsonQuery, function(data){
+  console.log(data)
+  mongoose.disconnect()
 })
 
 
-var query = Music.findOne({ 'artist': 'David Bowie' });
-query.select('id album')
-query.exec(function (err, data) {
-  if (err) return console.error(err)
-  console.log('%s is on the %s album.', data.id, data.album)
-})
 
-// .on('end', function() {
-//   console.log ("got here")
-//   mongoose.disconnect()
-// })
+var newJson = {'title': 'Something Stupid', 
+   'artist': 'Frank and Nancy Sinatra',
+   'link':   'http://somenetaddress.com/track_classic',
+   'album':  'The Best of Sinatra', 
+   'year':   '1965',
+   'genre':  'Crooners'
+}
 
+//jsonSave(newJson)
 
+//findJsonObject(newJson)
 
-
+// .pipe(function (data, enc, callback) {
+//   this.push(data)
+//   callBack()
+// }).pipe(console.log)
 
 

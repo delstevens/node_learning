@@ -10,11 +10,15 @@ function home(request, response){
 }
 
 function user(uName, response){
-  if ((uName.length > 3) && (uName.length < 100)) {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.write("Header \n")
-    response.write(uName +  "\n")
-    response.write(profile(uName))
+  if (response == 404) {
+    return "404: Not Found"
+  } else {
+    if ((uName.length > 3) && (uName.length < 100)) {
+      response.writeHead(200, {"Content-Type": "text/plain"});
+      response.write("Header \n")
+      response.write(uName +  "\n")
+      response.write(profile(uName))
+    }
   }
 }
 
