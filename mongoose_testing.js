@@ -12,25 +12,15 @@ var trackSchema = new Schema({
 var Music = mongoose.model('Music', trackSchema)
 mongoose.connect('mongodb://localhost/Music');
 
-function jsonSave(jsonObject) {
-  var thisJson = {'artist': jsonObject.artist, 'title': jsonObject.title}
-  var returnedData = findJsonObject(thisJson)
-  if ((returnedData === null) || (returnedData === undefined)) {
-    var first = new Music(jsonObject)
-    first.save(function(err, thisTrack) {
-      if (err) {
-        return console.error(err); 
-      } else {
-        console.log("Record Saved: " + thisTrack.title)
-      }
-    }).then('done', function () {
-      console.log('this says all done')
-      mongoose.disconnect()
-    })
-  } else {
-    console.log(returnedData)
-  }
-
+function jsonSave(jsonObject, callback) {
+  var track = new Music(jsonObject)
+  console.log(track.title)
+  track.save(function(err, first) {
+    if (err) {
+      console.error(err)
+    }
+    callback("Record Saved: " + track.title)
+  })
 }
 
 function findJsonObject (jsonObject, callback) {
@@ -42,12 +32,11 @@ function findJsonObject (jsonObject, callback) {
     } else {
       if (data) {
         outString = data.title + ' by ' + data.artist + ' is present in the database on the album: ' + data.album
-        callback(outString)
       } else {
         outString = null
-        callback(outString)
       }
     }
+    callback(outString)
   })
 }
 
@@ -60,21 +49,18 @@ findJsonObject(jsonQuery, function(data){
 
 
 
-var newJson = {'title': 'Something Stupid', 
-   'artist': 'Frank and Nancy Sinatra',
+var newJson = {'title': 'Fly Me to the Moon', 
+   'artist': 'Frank Sinatra',
    'link':   'http://somenetaddress.com/track_classic',
    'album':  'The Best of Sinatra', 
    'year':   '1965',
    'genre':  'Crooners'
 }
 
-//jsonSave(newJson)
 
-//findJsonObject(newJson)
-
-// .pipe(function (data, enc, callback) {
-//   this.push(data)
-//   callBack()
-// }).pipe(console.log)
+ jsonSave(newJson, function(data){
+   console.log(data)
+   mongoose.disconnect()
+ })
 
 
