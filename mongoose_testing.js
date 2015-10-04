@@ -14,7 +14,6 @@ mongoose.connect('mongodb://localhost/Music');
 
 function jsonSave(jsonObject, callback) {
   var track = new Music(jsonObject)
-  console.log(track.title)
   track.save(function(err, first) {
     if (err) {
       console.error(err)
@@ -41,14 +40,6 @@ function findJsonObject (jsonObject, callback) {
 }
 
 
-var jsonQuery = {'genre': 'Crooners'}
-findJsonObject(jsonQuery, function(data){
-  console.log(data)
-  mongoose.disconnect()
-})
-
-
-
 var newJson = {'title': 'Fly Me to the Moon', 
    'artist': 'Frank Sinatra',
    'link':   'http://somenetaddress.com/track_classic',
@@ -58,9 +49,35 @@ var newJson = {'title': 'Fly Me to the Moon',
 }
 
 
- jsonSave(newJson, function(data){
-   console.log(data)
-   mongoose.disconnect()
- })
+var jsonQuery = {'genre': 'Crooners'}
+findJsonObject(jsonQuery, function(data){
+  console.log(data)
+  mongoose.disconnect()
+})
 
+var jsonQuery2 = {'artist' : newJson.artist, 'title': newJson.title}
+findJsonObject(jsonQuery2, function(data){
+  if (data) {
+    console.log("jsonQuery2: " + data)
+  } else {
+    console.log("Nothing Found")
+  }
+  mongoose.disconnect()
+})
+
+ // jsonSave(newJson, function(data){
+ //   console.log(data)
+ //   mongoose.disconnect()
+ // })
+
+
+
+
+
+
+
+ // jsonSave(newJson, function(data){
+ //   console.log(data)
+ //   mongoose.disconnect()
+ // })
 
