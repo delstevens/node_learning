@@ -40,7 +40,7 @@ function findJsonObject (jsonObject, callback) {
 }
 
 
-var newJson = {'title': 'Fly Me to the Moon', 
+var newJson = {'title': 'A Very Good Year', 
    'artist': 'Frank Sinatra',
    'link':   'http://somenetaddress.com/track_classic',
    'album':  'The Best of Sinatra', 
@@ -49,11 +49,11 @@ var newJson = {'title': 'Fly Me to the Moon',
 }
 
 
-var jsonQuery = {'genre': 'Crooners'}
-findJsonObject(jsonQuery, function(data){
-  console.log(data)
-  mongoose.disconnect()
-})
+// var jsonQuery = {'genre': 'Crooners'}
+// findJsonObject(jsonQuery, function(data){
+//   console.log(data)
+//   mongoose.disconnect()
+// })
 
 var jsonQuery2 = {'artist' : newJson.artist, 'title': newJson.title}
 findJsonObject(jsonQuery2, function(data){
