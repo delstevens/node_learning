@@ -1,9 +1,16 @@
 {
-  "name": "node_learning",
-  "version": "1.0.1",
-  "description": "Repo for node development to build the backend for DJam in Node.",
+  "name": "djam",
+  "version": "1.0.0",
+  "description": "node version of djam server",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "mongoose": "^4.1.9",
+    "promise": "^7.0.4",
+    "q": "^1.4.1",
+    "split": "^1.0.0",
+    "concat-stream": "^1.5.0",
+    "through2": "^2.0.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,10 +21,12 @@
   },
   "keywords": [
     "node",
-    "learning",
-    "tutorial"
+    "djam",
+    "network",
+    "music",
+    "playlist"
   ],
-  "author": "delstevens",
+  "author": "del stevens",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/delstevens/node_learning/issues"

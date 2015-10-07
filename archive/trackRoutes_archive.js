@@ -10,10 +10,11 @@ var trackSchema = new Schema({
 });
 
 var Music = mongoose.model('Music', trackSchema)
-mongoose.connect('mongodb://localhost/Music');
+var dataSource = 'mongodb://localhost/Music'
 
 function jsonSave(jsonObject, callback) {
-  //todo add forceSave boolean 
+  mongoose.connect(dataSource);
+  //TODO: add forceSave boolean 
   var jsonQuery = {'artist' : newJson.artist, 'title': newJson.title}
   findJsonObject(jsonQuery, function(data){
     if (data) {
@@ -22,12 +23,14 @@ function jsonSave(jsonObject, callback) {
       var track = new Music(jsonObject)
       track.save(function(err, first) {
         callback("Record Saved: " + track.title)
+        mongoose.disconnect()
       })
     }
   })
 }
 
 function findJsonObject (jsonObject, callback) {
+  mongoose.connect(dataSource);
   var query = Music.findOne(jsonObject);
   var outString
   query.exec(function (err, data) {
@@ -35,48 +38,7 @@ function findJsonObject (jsonObject, callback) {
       return console.error(err)
     } else {
       if (data) {
-        outString = data.title + ' by ' + data.artist + ' is present in the database on the album: ' + data.album
-      } else {
-        outString = null
-      }
-    }
-    callback(outString)
-  })
-}
-
-
-var newJson = {'title': 'High Hopes', 
-   'artist': 'Frank Sinatra',
-   'link':   'http://somenetaddress.com/track_classic',
-   'album':  'The Best of Sinatra', 
-   'year':   '1965',
-   'genre':  'Crooners'
-}
-
-function addSpaces(inString){
-  var maxLength = 31
-  var spaceNum = maxLength - inString.length
-  var outString = inString
-  for (var i = 0; i< spaceNum; i++) {
-    outString += " "
-  }
-  return outString
-}
-
-function findAll (jsonObject, callback) {
-  var query = Music.find({})
-  var outString = ""
-  query.exec(function (err, data) {
-    if (err) {
-      return console.error(err)
-    } else {
-      if (data) {
-        for (var i = 0; i < data.length; i++) {
-          outString += addSpaces(data[i].artist) + ": "
-          outString += addSpaces(data[i].title) + ": "
-          outString += data[i].album
-          outString += "\n"
-        }
+        outString = JSON.stringify(data)
       } else {
         outString = null
       }
@@ -86,11 +48,51 @@ function findAll (jsonObject, callback) {
   })
 }
 
-function getAllTracks() {
-  findAll({}, function(data){
-    var myVar = data
-    console.log( myVar)
+
+function findAll (jsonObject, callback) {
+  mongoose.connect(dataSource);
+  var query = Music.find({})
+  var outString = ""
+  query.exec(function (err, data) {
+    if (err) {
+      return console.error(err)
+    } else {
+      if (data) {
+        outString = JSON.stringify(data)
+      } else {
+        outString = null
+      }
+    }
+    callback(outString)
+    mongoose.disconnect()
   })
 }
 
-getAllTracks()
+
+function findAllWhere (jsonObject, callback) {
+  mongoose.connect(dataSource);
+  var query = Music.find(jsonObject)
+  var outString = ""
+  query.exec(function (err, data) {
+    if (err) {
+      return console.error(err)
+    } else {
+      if (data) {
+        outString = JSON.stringify(data)
+      } else {
+        outString = null
+      }
+    }
+    callback(outString)
+    mongoose.disconnect()
+  })
+}
+
+
+
+
+
+module.exports.findAll = findAll
+module.exports.saveTrack = jsonSave
+module.exports.findTrack = findJsonObject
+module.exports.findTracksWhere = findAllWhere

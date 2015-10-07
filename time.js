@@ -1,1 +1,0 @@
-console.log(Date.parse("2015-09-15T08:25:34.306Z"))
