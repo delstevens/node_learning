@@ -13,21 +13,37 @@ var Music = mongoose.model('Music', trackSchema)
 var dataSource = 'mongodb://localhost/Music'
 
 function jsonSave(jsonObject, callback) {
+  // console.log(jsonObject)
   mongoose.connect(dataSource);
-  //TODO: add forceSave boolean 
-  var jsonQuery = {'artist' : newJson.artist, 'title': newJson.title}
-  findJsonObject(jsonQuery, function(data){
-    if (data) {
-      callback(data)
-    } else {
-      var track = new Music(jsonObject)
-      track.save(function(err, first) {
-        callback("Record Saved: " + track.title)
-        mongoose.disconnect()
-      })
+  //TODO: check for existing record 
+  var track = new Music(jsonObject)
+  track.save(function(err, first) {
+    if (err) {
+      console.log(err)
     }
+    callback("Record Saved: " + track.title)
+    mongoose.disconnect()
   })
 }
+
+
+function findThisJson (jsonObject, callback) {
+  var query = Music.find(jsonObject)
+  var outString = ""
+  query.exec(function (err, data) {
+    if (err) {
+      return console.error(err)
+    } else {
+      if (data) {
+        outString = JSON.stringify(data)
+      } else {
+        outString = null
+      }
+    }
+    callback(outString)
+  })
+}
+
 
 
 function findAllWhere (jsonObject, callback) {

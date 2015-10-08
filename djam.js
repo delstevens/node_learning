@@ -6,19 +6,19 @@ http.createServer(function(request, response) {
   //TODO: add max length of url.request to prevent injection
   console.log(request.url + "\n" + request.method)
 
-  if(request.method === "POST") {
-    if (request.url === "/music/import") {
-      var requestBody = '';
-      request.on('data', function(data) {
-        requestBody += data;
-      });
-      request.on('end', function() {
-        trackRoutes.saveTrack(JSON.parse(requestBody), function(data){
-          response.end(data)
-        })
-      });
+  if (request.url === "/music/import") {
+    if(request.method === "POST") {
+      var getJSON = {'artist':'Jerry Lee Lewis', 'title':'Great Balls of Fire'}
+      console.log(getJSON)
+      var gotData = trackRoutes.saveTrack(getJSON, function(saveAnswer){
+        response.write(saveAnswer)
+        response.end();
+      }) 
     }
-  } else if(request.method == "GET") {
+  }
+
+  if(request.method == "GET") {
+
     if(request.url.indexOf('.jpg') != -1){ 
       fs.readFile("." + request.url, function (err, data) {
         if (err) {
@@ -29,35 +29,27 @@ http.createServer(function(request, response) {
           response.end();
         }
       });
-    } else if (request.url.indexOf('.css') != -1) { 
-      fs.readFile("." + request.url, function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          response.writeHead(200, {'Content-Type': 'text/css'});
-          response.write(data);
-          response.end();
-        }
-      });
-    } else if (request.url.indexOf('.js') != -1) { 
-      fs.readFile("." + request.url, function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          response.writeHead(200, {'Content-Type': 'application/javascript'});
-          response.write(data);
-          response.end();
-        }
-      });
     } else {
+
       switch(request.url) {
       case "/":
-          fs.readFile('./html/default.html', function (err, html) {
+          fs.readFile('./default.html', function (err, html) {
             if (err) {
                 throw err; 
             } else {      
               response.writeHead(200, {"Content-Type": "text/html"});  
               response.write(html);  
+              response.end(); 
+            }
+          })
+          break;
+      case "/css/djam.css":
+          fs.readFile('./css/djam.css', function (err, css) {
+            if (err) {
+                throw err; 
+            } else {      
+              response.writeHead(200, {"Content-Type": "text/css"});  
+              response.write(css);  
               response.end(); 
             }
           })
